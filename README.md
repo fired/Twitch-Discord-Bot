@@ -61,7 +61,7 @@ Before setting up the bot, you need to have the following:
 - List Colors
     - Displays a list of colors along with their hexadecimal values.
     - Command: .list_colors
-- Purge Messages
+- Purge Messages (BROKEN)
     - Deletes the specified number of messages in the current channel.
     - Command: .purge <amount>
     - Example: .purge 10
