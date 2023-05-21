@@ -47,26 +47,26 @@ async def on_message(message):
     await bot.process_commands(message)  # process commands after checking for "gm japeto"
 #-----------------------------------------------------------------------------------------------------------
 # send message to a specific channel
-@bot.command(name='send_message', help='Sends a custom message to a specified channel.', usage='Usage: !send_message <channel_id> <message>')
+@bot.command(name='send_message', help='Sends a custom message to a specified channel.', usage='Usage: .send_message <channel_id> <message>')
 async def send_message(ctx, channel_id: int, *, message: str):
     try:
         channel = bot.get_channel(channel_id)
         if channel is not None:
             await channel.send(message)
         else:
-            await ctx.send("I couldn't find a channel with that ID!")
+            await ctx.send("I couldn't find a channel with that ID.")
     except Exception as e:
         await ctx.send("Command doesn't work")
 
 @send_message.error
 async def send_message_error(ctx, error):
     await ctx.channel.purge(limit=1)
-    await ctx.send("Usage: !send_message <channel_id> <message>")
-# Usage: !send_message <channel_id> <message>
+    await ctx.send("Usage: .send_message <channel_id> <message>")
+# Usage: .send_message <channel_id> <message>
 
 #-----------------------------------------------------------------------------------------------------------
 # send a message to a specific channel with embed
-@bot.command(name='sendme', help='Sends a custom embed message to a specified channel.', usage='Usage: !sendme <channel_id> "<title>" <color> <message>')
+@bot.command(name='sendme', help='Sends a custom embed message to a specified channel.', usage='Usage: .sendme <channel_id> "<title>" <color> <message>')
 async def sendme(ctx, channel_id: int, title: str, color: str, *, message: str):
     try:
         channel = bot.get_channel(channel_id)
@@ -74,15 +74,15 @@ async def sendme(ctx, channel_id: int, title: str, color: str, *, message: str):
             embed = Embed(title=title, description=message, color=int(color, 16))
             await channel.send(embed=embed)
         else:
-            await ctx.send("I couldn't find a channel with that ID!")
+            await ctx.send("I couldn't find a channel with that ID.")
     except Exception as e:
         await ctx.send("Command doesn't work")
 
 @sendme.error
 async def sendme_error(ctx, error):
     await ctx.channel.purge(limit=1)
-    await ctx.send('Usage: !sendme <channel_id> "<title>" <color> <message>')
-# Usage: !sendme <channel_id> "<title>" <color> <message>
+    await ctx.send('Usage: .sendme <channel_id> "<title>" <color> <message>')
+# Usage: .sendme <channel_id> "<title>" <color> <message>
 
 #-----------------------------------------------------------------------------------------------------------
 # give a list of all the channels with their IDs
@@ -98,7 +98,7 @@ async def listc(ctx):
 async def listc_error(ctx, error):
     await ctx.channel.purge(limit=1)
     await ctx.send("Command doesn't work")
-# Usage: !listc
+# Usage: .listc
 
 #-----------------------------------------------------------------------------------------------------------
 # give a list of colors with there hex value
@@ -138,19 +138,19 @@ async def list_colors(ctx):
 async def list_colors_error(ctx, error):
     await ctx.channel.purge(limit=1)
     await ctx.send("Command doesn't work")
-# Usage: !list_colors
+# Usage: .list_colors
 
 #-----------------------------------------------------------------------------------------------------------
 # delete a certain amount of messages
-@bot.command(name='purge', help='Deletes a specified number of messages in the current channel.', usage='Usage: !purge <amount>')
+@bot.command(name='purge', help='Deletes a specified number of messages in the current channel.', usage='Usage: .purge <amount>')
 @has_permissions(manage_messages=True)
 async def purge(ctx, amount: int):
     await ctx.channel.purge(limit=amount + 1)  # +1 to include the command message itself
 @purge.error
 async def purge_error(ctx, error):
     await ctx.channel.purge(limit=1)
-    await ctx.send("Usage: !purge <amount>")
-# Usage: !purge <amount>
+    await ctx.send("Usage: .purge <amount>")
+# Usage: .purge <amount>
 
 #-----------------------------------------------------------------------------------------------------------
 # better looking help menu
@@ -171,7 +171,7 @@ async def on_member_join(member):
     await member.add_roles(role)
 #-----------------------------------------------------------------------------------------------------------
 # make channel private
-@bot.command(name='tp', help='Makes a specificed channel private or not.', usage='Usage: !tp #channel-name')
+@bot.command(name='tp', help='Makes a specificed channel private or not.', usage='Usage: .tp #channel-name')
 @commands.has_permissions(manage_channels=True)
 async def tp(ctx, channel: discord.TextChannel):
     overwrites = channel.overwrites
@@ -197,8 +197,8 @@ async def tp(ctx, channel: discord.TextChannel):
 @tp.error
 async def tp_error(ctx, error):
     await ctx.channel.purge(limit=1)
-    await ctx.send("Usage: !tp #channel-name")
-# Usage: !tp #channel-name
+    await ctx.send("Usage: .tp #channel-name")
+# Usage: .tp #channel-name
 
 #-----------------------------------------------------------------------------------------------------------
 # twich login
