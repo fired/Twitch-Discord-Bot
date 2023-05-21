@@ -72,3 +72,6 @@ Before setting up the bot, you need to have the following:
 - Help
     - Displays the list of available commands with their descriptions.
     - Command: .help
+
+## License
+   This project is licensed under the [MIT License](https://mit-license.org/).
