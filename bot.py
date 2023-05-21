@@ -140,7 +140,7 @@ async def list_colors_error(ctx, error):
     await ctx.send("Command doesn't work")
 # Usage: .list_colors
 
-#-----------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------- BROKEN, NEED TO FIX
 # delete a certain amount of messages
 @bot.command(name='purge', help='Deletes a specified number of messages in the current channel.', usage='Usage: .purge <amount>')
 @has_permissions(manage_messages=True)
