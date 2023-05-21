@@ -74,4 +74,5 @@ Before setting up the bot, you need to have the following:
     - Command: .help
 
 ## License
-   This project is licensed under the [MIT License](https://mit-license.org/).
+   [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+   This project is licensed under the GNU General Public License v3.0. See the [LICENSE](https://github.com/kuc/Twitch-Discord-Bot/blob/main/LICENSE) file for details.
