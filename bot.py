@@ -36,11 +36,11 @@ async def on_message(message):
     # Remove all emojis and strip leading/trailing spaces
     content = re.sub(r':[^:]*:', '', emoji.demojize(message.content.lower())).strip()
 
-    if content == "gm japeto":
+    if content == "gm japeto": # replace with whatever
         await message.channel.send(f'Good morning {message.author.name} :sun_with_face:')
-    if content == "gn japeto":
+    if content == "gn japeto": # replace with whatever
         await message.channel.send(f'Goodnight {message.author.name} :first_quarter_moon_with_face:')
-    if content == "good evening japeppy":
+    if content == "good evening japeppy": # replace with whatever
         await message.channel.send(f'Good evening {message.author.name} :smile:')
     
 
