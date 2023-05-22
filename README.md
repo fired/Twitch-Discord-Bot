@@ -49,11 +49,11 @@ Before setting up the bot, you need to have the following:
 ## Available Commands
 - Send Message
     - Sends a custom message to the specified channel.
-    - Command: .send_message <channel_id> <message>
+    - Command: .send_message <channel_id> MESSAGE
     - Example: .send_message 123456789012345678 Hello, world!
 - Send Embed Message
     - Sends a custom embed message to the specified channel.
-    - Command: .sendme <channel_id> "<title>" <color> <message>
+    - Command: .sendme <channel_id> "<title>" COLOR MESSAGE
     - Example: .sendme 123456789012345678 "Important Announcement" ff0000 This is an important announcement!
 - List Channels
     - Lists all text channels and their IDs in the server.
@@ -63,7 +63,7 @@ Before setting up the bot, you need to have the following:
     - Command: .list_colors
 - Purge Messages
     - Deletes the specified number of messages in the current channel.
-    - Command: .purge <amount>
+    - Command: .purge AMOUNT
     - Example: .purge 10
 - Toggle Channel Privacy
     - Makes the specified channel private or public.
