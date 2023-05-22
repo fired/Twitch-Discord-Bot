@@ -53,7 +53,7 @@ Before setting up the bot, you need to have the following:
     - Example: .send_message 123456789012345678 Hello, world!
 - Send Embed Message
     - Sends a custom embed message to the specified channel.
-    - Command: .sendme <channel_id> "<title>" COLOR MESSAGE
+    - Command: .sendme <channel_id> "<title>" HEX MESSAGE
     - Example: .sendme 123456789012345678 "Important Announcement" ff0000 This is an important announcement!
 - List Channels
     - Lists all text channels and their IDs in the server.
