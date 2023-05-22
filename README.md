@@ -73,6 +73,12 @@ Before setting up the bot, you need to have the following:
     - Displays the list of available commands with their descriptions.
     - Command: .help
 
+## To Add
+- Mute
+- Ban
+- Unban
+- Timeout
+
 ## License
    [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
    
