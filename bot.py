@@ -18,7 +18,7 @@ intents = discord.Intents.all()
 intents.typing = False
 intents.presences = False
 intents.messages = True
-bot = commands.Bot(command_prefix='.', intents=intents)
+bot = commands.Bot(command_prefix='!', intents=intents)
 
 live_message_id = None
 offline_message_id = None
@@ -47,26 +47,37 @@ async def on_message(message):
     await bot.process_commands(message)  # process commands after checking for "gm japeto"
 #-----------------------------------------------------------------------------------------------------------
 # send message to a specific channel
-@bot.command(name='send_message', help='Sends a custom message to a specified channel.', usage='Usage: .send_message <channel_id> <message>')
+@bot.command(name='send_message', help='Sends a custom message to a specified channel.', usage=f'Usage: {bot.command_prefix}send_message <channel_id> <message>')
+@commands.has_permissions(manage_messages=True)
 async def send_message(ctx, channel_id: int, *, message: str):
     try:
         channel = bot.get_channel(channel_id)
         if channel is not None:
             await channel.send(message)
         else:
-            await ctx.send("I couldn't find a channel with that ID.")
+            await ctx.send("I couldn't find a channel with that ID!")
+            await asyncio.sleep(1)
+            await ctx.channel.purge(limit=1)
     except Exception as e:
         await ctx.send("Command doesn't work")
+        await asyncio.sleep(1)
+        await ctx.channel.purge(limit=1)
 
 @send_message.error
 async def send_message_error(ctx, error):
-    await ctx.channel.purge(limit=1)
-    await ctx.send("Usage: .send_message <channel_id> <message>")
-# Usage: .send_message <channel_id> <message>
+    if isinstance(error, commands.MissingPermissions):
+        await ctx.message.delete()
+        message = await ctx.send("You do not have the necessary permissions to use this command.")
+        await asyncio.sleep(1)
+        await message.delete()
+    else:
+        await ctx.send(f"Usage: {bot.command_prefix}send_message <channel_id> <message>")
+# Usage: !send_message <channel_id> <message>
 
 #-----------------------------------------------------------------------------------------------------------
 # send a message to a specific channel with embed
-@bot.command(name='sendme', help='Sends a custom embed message to a specified channel.', usage='Usage: .sendme <channel_id> "<title>" <color> <message>')
+@bot.command(name='sendme', help='Sends a custom embed message to a specified channel.', usage=f'Usage: {bot.command_prefix}sendme <channel_id> "<title>" <color> <message>')
+@commands.has_permissions(manage_messages=True)
 async def sendme(ctx, channel_id: int, title: str, color: str, *, message: str):
     try:
         channel = bot.get_channel(channel_id)
@@ -74,19 +85,29 @@ async def sendme(ctx, channel_id: int, title: str, color: str, *, message: str):
             embed = Embed(title=title, description=message, color=int(color, 16))
             await channel.send(embed=embed)
         else:
-            await ctx.send("I couldn't find a channel with that ID.")
+            await ctx.send("I couldn't find a channel with that ID!")
+            await asyncio.sleep(1)
+            await ctx.channel.purge(limit=1)
     except Exception as e:
         await ctx.send("Command doesn't work")
+        await asyncio.sleep(1)
+        await ctx.channel.purge(limit=1)
 
 @sendme.error
 async def sendme_error(ctx, error):
-    await ctx.channel.purge(limit=1)
-    await ctx.send('Usage: .sendme <channel_id> "<title>" <color> <message>')
-# Usage: .sendme <channel_id> "<title>" <color> <message>
+    if isinstance(error, commands.MissingPermissions):
+        await ctx.message.delete()
+        message = await ctx.send("You do not have the necessary permissions to use this command.")
+        await asyncio.sleep(1)
+        await message.delete()
+    else:
+        await ctx.send(f'Usage: {bot.command_prefix}sendme <channel_id> "<title>" <color> <message>')
+# Usage: !sendme <channel_id> "<title>" <color> <message>
 
 #-----------------------------------------------------------------------------------------------------------
 # give a list of all the channels with their IDs
-@bot.command(name='listc', help='Lists all text channels and their IDs')
+@bot.command(name='listc', help='Lists all text channels and their IDs', usage=f'Usage: {bot.command_prefix}listc')
+@commands.has_permissions(manage_messages=True)
 async def listc(ctx):
     embed = Embed(title="Text Channels", color=0x00ff00)
     for channel in ctx.guild.channels:
@@ -96,13 +117,22 @@ async def listc(ctx):
 
 @listc.error
 async def listc_error(ctx, error):
-    await ctx.channel.purge(limit=1)
-    await ctx.send("Command doesn't work")
-# Usage: .listc
+    if isinstance(error, commands.MissingPermissions):
+        await ctx.message.delete()
+        message = await ctx.send("You do not have the necessary permissions to use this command.")
+        await asyncio.sleep(1)
+        await message.delete()
+    else:
+        await ctx.message.delete()
+        await ctx.send("Command doesn't work")
+        await asyncio.sleep(1)
+        await ctx.channel.purge(limit=1)
+# Usage: !listc
 
 #-----------------------------------------------------------------------------------------------------------
 # give a list of colors with there hex value
-@bot.command(name='list_colors', help='Displays a list of colors along with their hexadecimal values.')
+@bot.command(name='list_colors', help='Displays a list of colors along with their hexadecimal values.', usage=f'Usage: {bot.command_prefix}list_colors')
+@commands.has_permissions(manage_messages=True)
 async def list_colors(ctx):
     colors = {
         "Red": "FF0000",
@@ -134,23 +164,42 @@ async def list_colors(ctx):
         embed.add_field(name=color, value=f"#{value}", inline=True)
 
     await ctx.send(embed=embed)
+
 @list_colors.error
 async def list_colors_error(ctx, error):
-    await ctx.channel.purge(limit=1)
-    await ctx.send("Command doesn't work")
-# Usage: .list_colors
+    if isinstance(error, commands.MissingPermissions):
+        await ctx.message.delete()
+        message = await ctx.send("You do not have the necessary permissions to use this command.")
+        await asyncio.sleep(1)
+        await message.delete()
+    else:
+        await ctx.message.delete()
+        await ctx.send("Command doesn't work")
+        await asyncio.sleep(1)
+        await ctx.channel.purge(limit=1)
+# Usage: !list_colors
 
-#----------------------------------------------------------------------------------------------------------- BROKEN, NEED TO FIX
+#-----------------------------------------------------------------------------------------------------------
 # delete a certain amount of messages
-@bot.command(name='purge', help='Deletes a specified number of messages in the current channel.', usage='Usage: .purge <amount>')
-@has_permissions(manage_messages=True)
-async def purge(ctx, amount: int):
-    await ctx.channel.purge(limit=amount + 1)  # +1 to include the command message itself
+@bot.command(name='purge', help='Deletes a specified number of messages in the current channel.', usage=f'Usage: {bot.command_prefix}purge <amount>')
+@commands.has_permissions(manage_messages=True)
+async def purge(ctx, amount : int):
+    await ctx.message.delete()
+    await ctx.channel.purge(limit=amount)
+
 @purge.error
 async def purge_error(ctx, error):
-    await ctx.channel.purge(limit=1)
-    await ctx.send("Usage: .purge <amount>")
-# Usage: .purge <amount>
+    if isinstance(error, commands.MissingPermissions):
+        await ctx.message.delete()
+        message = await ctx.send("You do not have the necessary permissions to use this command.")
+        await asyncio.sleep(1)
+        await message.delete()
+    else:
+        await ctx.message.delete()
+        await ctx.send(f"Usage: {bot.command_prefix}purge <amount>")
+        await asyncio.sleep(2)
+        await ctx.channel.purge(limit=1)
+# Usage: !purge <amount>
 
 #-----------------------------------------------------------------------------------------------------------
 # better looking help menu
@@ -160,18 +209,21 @@ class CustomHelpCommand(DefaultHelpCommand):
         embed = Embed(title="Bot Commands", description='')
         for page in self.paginator.pages:
             embed.description += page
+        await self.context.message.delete()  # Delete the command message
         await destination.send(embed=embed)
 
 bot.help_command = CustomHelpCommand()
+
 #-----------------------------------------------------------------------------------------------------------
 # autorole
 @bot.event
 async def on_member_join(member):
     role = get(member.guild.roles, name="Sock Puppet")  # Replace "your-role-name" with the role you want to assign
     await member.add_roles(role)
+    
 #-----------------------------------------------------------------------------------------------------------
 # make channel private
-@bot.command(name='tp', help='Makes a specificed channel private or not.', usage='Usage: .tp #channel-name')
+@bot.command(name='tp', help='Makes a specificed channel private or not.', usage=f'Usage: {bot.command_prefix}tp #channel-name')
 @commands.has_permissions(manage_channels=True)
 async def tp(ctx, channel: discord.TextChannel):
     overwrites = channel.overwrites
@@ -196,9 +248,17 @@ async def tp(ctx, channel: discord.TextChannel):
 
 @tp.error
 async def tp_error(ctx, error):
-    await ctx.channel.purge(limit=1)
-    await ctx.send("Usage: .tp #channel-name")
-# Usage: .tp #channel-name
+    if isinstance(error, commands.MissingPermissions):
+        await ctx.message.delete()
+        message = await ctx.send("You do not have the necessary permissions to use this command.")
+        await asyncio.sleep(1)
+        await message.delete()
+    else:
+        await ctx.message.delete()
+        await ctx.send(f"Usage: {bot.command_prefix}tp #channel-name")
+        await asyncio.sleep(2)
+        await ctx.channel.purge(limit=1)
+# Usage: !tp #channel-name
 
 #-----------------------------------------------------------------------------------------------------------
 # twich login
@@ -228,6 +288,7 @@ async def get_user_id(username, token):
         )
         response_json = await response.json()
         return response_json['data'][0]['id']
+    
 #-----------------------------------------------------------------------------------------------------------
 # checks if streamer is online or offline
 @tasks.loop(minutes=1)
@@ -257,6 +318,7 @@ async def check_twitch_status():
                 offline_message = await channel.fetch_message(offline_message_id)
                 await offline_message.delete()
             message = await channel.send(f'{TWITCH_USERNAME} is now live on Twitch! https://www.twitch.tv/{TWITCH_USERNAME}')
+            await bot.change_presence(activity=discord.Streaming(name=f"{TWITCH_USERNAME} is live!", url=f"https://twitch.tv/{TWITCH_USERNAME}"))
             live_message_id = message.id
     elif not response_json['data'] and streamer_is_live:
         streamer_is_live = False
@@ -265,22 +327,16 @@ async def check_twitch_status():
                 live_message = await channel.fetch_message(live_message_id)
                 await live_message.delete()
             message = await channel.send(f'{TWITCH_USERNAME} is not streaming right now.')
+            await bot.change_presence(activity=discord.Game(name=f"{TWITCH_USERNAME} is Not Live"))
             offline_message_id = message.id
 
     first_check = False
 
-
-
-async def update_bot_presence():
-    await bot.wait_until_ready()
-    game = discord.Game(name=f"twitch.tv/japeto")
-    await bot.change_presence(status=discord.Status.online, activity=game)
 #-----------------------------------------------------------------------------------------------------------
 @bot.event
 async def on_ready():
     print(f'We have logged in as {bot.user}')
     check_twitch_status.start()
-    await update_bot_presence()
 
     global first_check
     first_check = True
@@ -310,9 +366,11 @@ async def on_ready():
 
     if streamer_is_live:
         message = await channel.send(f'{TWITCH_USERNAME} is currently live on Twitch! https://www.twitch.tv/{TWITCH_USERNAME}')
+        await bot.change_presence(activity=discord.Streaming(name=f"{TWITCH_USERNAME} is live!", url=f"https://twitch.tv/{TWITCH_USERNAME}"))
         live_message_id = message.id
     else:
         message = await channel.send(f'{TWITCH_USERNAME} is currently not streaming.')
+        await bot.change_presence(activity=discord.Game(name=f"{TWITCH_USERNAME} is Not Live"))
         offline_message_id = message.id
 
 
